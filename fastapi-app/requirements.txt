@@ -1,0 +1,14 @@
+python-binance
+binance_historical_data
+sqlalchemy
+sqlalchemy_utils
+python-dotenv
+pandas
+pyjwt
+fastapi
+uvicorn
+passlib[bcrypt]
+python-jose
+psycopg2
+statsmodels
+matplotlib

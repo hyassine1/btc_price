@@ -1,0 +1,26 @@
+# Use an official Python runtime as a parent image
+FROM python:3.8
+
+# Set environment variables
+ENV AIRFLOW_HOME=/usr/local/airflow
+ENV AIRFLOW__WEBSERVER__AUTH_BACKEND=airflow.contrib.auth.backends.password_auth
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -yqq --no-install-recommends \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    libpq-dev \
+    && apt-get autoremove -yqq --purge && apt-get clean
+
+# Install Airflow with extras
+RUN pip install apache-airflow[postgres]
+
+# Copy the entrypoint script and user creation script into the image
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY create_user.sh /usr/local/bin/create_user.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh /usr/local/bin/create_user.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

@@ -1,0 +1,14 @@
+python-binance
+binance_historical_data
+pandas
+pyjwt
+fastapi
+uvicorn
+passlib[bcrypt]
+python-jose
+statsmodels
+matplotlib
+SQLAlchemy==1.4.39
+psycopg2==2.9.6
+python-dotenv==0.19.2
+sqlalchemy_utils

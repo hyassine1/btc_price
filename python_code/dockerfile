@@ -1,0 +1,21 @@
+# Use an official Python runtime as a parent image
+FROM python:3.9
+
+# Set the working directory in the container
+WORKDIR /app
+
+RUN mkdir /app/history_prices
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install any dependencies needed for your Python code
+RUN python -m pip install --upgrade pip
+RUN pip install -r requirements.txt 
+
+# Expose the port your application runs on
+# This is optional and depends on your application
+EXPOSE 5000
+
+# Define the command to run your application
+CMD ["python", "run_all.py"]  # Replace app.py with the entry point of your application

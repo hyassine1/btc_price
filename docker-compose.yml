@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  python_code:
+    build:
+      context: ./python_code
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      USER: ${USER}
+      PASSWORD: ${PASSWORD}
+      HOST: ${HOST}
+      PORT: ${PORT}
+      DB: ${DB}
+      API_KEY: ${API_KEY}
+      SECRET_KEY: ${SECRET_KEY}
+    volumes:
+      - ./python_code:/app  # Mount your Python code directory into the container
+    networks:
+      - app-network
+
+  fastapi:
+    build:
+      context: ./fastapi-app
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      USER: ${USER}
+      PASSWORD: ${PASSWORD}
+      HOST: ${HOST}
+      PORT: ${PORT}
+      DB: ${DB}
+      API_KEY: ${API_KEY}
+      SECRET_KEY: ${SECRET_KEY}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./fastapi-app:/app  # Mount your Python code directory into the container
+    networks:
+      - app-network
+
+
+  airflow:
+    build:
+      context: ./airflow
+      dockerfile: Dockerfile
+    environment:
+      AIRFLOW_HOME: /usr/local/airflow
+      AIRFLOW__WEBSERVER__AUTH_BACKEND: airflow.contrib.auth.backends.password_auth
+    volumes:
+      - airflow_data:/usr/local/airflow
+      - ./airflow/dags:/usr/local/airflow/dags
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+
+
+networks:
+  app-network:
+
+volumes:
+  airflow_data:
